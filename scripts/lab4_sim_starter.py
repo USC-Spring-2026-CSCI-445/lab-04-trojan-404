@@ -94,7 +94,7 @@ class RobotController:
 
         # Define PD controller for wall-following here
         ######### Your code starts here #########
-        self.controller = PDController(kP=0.8, kD=0.6, u_min=-1.2, u_max=1.2)
+        self.controller = PDController(kP=0.8, kD=0.6, u_min=-1.3, u_max=1.3)
         ######### Your code ends here #########
 
         self.desired_distance = desired_distance  # Desired distance from the wall
@@ -125,12 +125,14 @@ class RobotController:
             err = self.ir_distance - target
             u = self.controller.control(err, time())
 
-            if self.ir_distance < target:
-                ctrl_msg.linear.x = 0.08
+            if self.ir_distance > target + 0.60:
+                u = -0.35
+                ctrl_msg.linear.x = 0.12
             else:
-                ctrl_msg.linear.x = 0.18
+                ctrl_msg.linear.x = 0.18 if self.ir_distance > target else 0.10
 
             ctrl_msg.angular.z = u
+
 
 
             ######### Your code ends here #########
