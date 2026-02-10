@@ -92,7 +92,7 @@ class RobotController:
 
         # Define PD controller for wall following here
         ######### Your code starts here #########
-        self.controller = PDController(kP=0.6, kD=0.8, u_min=-1.0, u_max=1.0)
+        self.controller = PDController(kP=1.2, kD=0.8, u_min=-1.5, u_max=1.5)
         ######### Your code ends here #########
 
         self.desired_distance = desired_distance  # Desired distance from the wall
@@ -102,7 +102,7 @@ class RobotController:
         raw = state.cliff
         ######### Your code starts here #########
         # conversion from raw sensor values to distance. Use equation from Lab 2
-        raw_val = float(raw[3])
+        raw_val = float(raw)
         raw_val = max(raw_val, 1.0)
         distance = 1597 * pow(raw_val, -1.522)
 
@@ -134,7 +134,7 @@ class RobotController:
                 u = max(u, -0.6)
                 ctrl_msg.linear.x = 0.08
 
-            elif self.ir_distance > target + 0.35:
+            elif self.ir_distance > target + 0.25:
                 u = min(u, 0.9)
                 ctrl_msg.linear.x = 0.12
 
@@ -151,7 +151,7 @@ class RobotController:
 
 
 if __name__ == "__main__":
-    desired_distance = 0.4
+    desired_distance = 0.2
     controller = RobotController(desired_distance)
     try:
         controller.control_loop()
